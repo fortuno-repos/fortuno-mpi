@@ -1,0 +1,26 @@
+name = "fortuno-mpi"
+version = "0.1.0"
+license = "BSD-2-Clause-Patent"
+author = "Fortuno authors"
+maintainer = "aradi@uni-bremen.de"
+copyright = "Copyright 2024, Fortuno authors"
+
+[build]
+auto-executables = false
+auto-tests = true
+auto-examples = true
+module-naming = false
+
+[install]
+library = true
+
+[fortran]
+# Enabling the implicit options seems to be necessary for using fpm with meta-dependency mpi.
+# Do not worry, the project does not make use of them. ;-)
+implicit-typing = true
+implicit-external = true
+source-form = "free"
+
+[dependencies]
+mpi = "*"
+fortuno = { git = "https://github.com/fortuno-repos/fortuno.git" }

@@ -1,3 +1,7 @@
+# This file is part of Fortuno.
+# Licensed under the BSD-2-Clause Plus Patent license.
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+
 include(FetchContent)
 
 
@@ -122,7 +126,7 @@ function (fortuno_mpi_get_subproject subproject_package)
       message(
         FATAL_ERROR
         "Subproject ${subproject_package}: Could not obtain subproject to provide target "
-        "${_target} (tried: ${subproject_GET_METHODS})"
+        "${_target}"
       )
     endif ()
   endforeach ()

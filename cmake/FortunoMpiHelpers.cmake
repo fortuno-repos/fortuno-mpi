@@ -23,78 +23,108 @@ function (fortuno_mpi_setup_build_type default_build_type)
 endfunction()
 
 
-# Gets a subproject.
+# Obtains a subproject by the provided list of methods.
 #
 # Args:
-#   subproject: name of the subproject
-#   get_methods: priority list of get methods to obtain the subproject,
-#     possible choices are 'find' and 'fetch'
+#   subproject_package: name of the subproject package
+#   PACKAGE_SOURCE_DIR package_source_dir: where to download the package source
+#   TARGETS target: Target names to use for checking whether subproject was obtained successfully
+#   GIT_REPOSITORY git_repository: Git repository to fetch the subproject from.
+#   GIT_REVISION git_revision: Git revision to fetch
+#   GET_METHODS get_methods: priority list of get methods to obtain the subproject,
+#     possible choices are 'find', 'fetch'.
+#   FIND_PACKAGE_ARGS find_package_args: optional arguments to pass to find_package()
 #
-macro (fortuno_mpi_get_subproject subproject get_methods)
+function (fortuno_mpi_get_subproject subproject_package)
+  list(REMOVE_AT ARGV 0)
+  set(one_value_args PACKAGE SOURCE_DIR GIT_REPOSITORY GIT_REVISION)
+  set(multi_value_args GET_METHODS TARGETS FIND_PACKAGE_ARGS)
+  cmake_parse_arguments(subproject "" "${one_value_args}" "${multi_value_args}" ${ARGV})
 
-  set(_prefix fortuno_mpi_sub_${subproject})
-  set(_subproject_package ${${_prefix}_package})
-  set(_subproject_source_dir ${${_prefix}_source_dir})
-  set(_subproject_target ${${_prefix}_target})
-  set(_subproject_git_repository ${${_prefix}_git_repository})
-  set(_subproject_git_revision ${${_prefix}_git_revision})
-  set(_subproject_dir ${${_prefix}_source_dir})
-
-  if (TARGET ${_subproject_target})
+  # Check whether targets are already there
+  set(_targets_found)
+  set(_targets_missing)
+  foreach (_target IN ITEMS ${subproject_TARGETS})
+    if (TARGET ${_target})
+      LIST(APPEND _targets_found ${_target})
+    else ()
+      LIST(APPEND _targets_missing ${_target})
+    endif ()
+  endforeach ()
+  if (_targets_found AND _targets_missing)
+    message(
+      FATAL_ERROR
+      "Subproject ${subproject_package}: Inconsistent targets, some targets (${_targets_found}) "
+      "exist already, while others (${_targets_missing}) are missing"
+    )
+  elseif (_targets_found)
+    message(STATUS "Subproject ${subproject_package}: All targets already defined")
     return ()
   endif ()
 
-  foreach(_get_method IN ITEMS ${get_methods})
+  # Obtain subproject according to the priority list
+  set(_allowed_methods "find" "fetch")
+  foreach (_get_method IN ITEMS ${subproject_GET_METHODS})
 
-    if ("${_get_method}" STREQUAL "find")
-      find_package(${_subproject_package})
-      if (${_subproject_package}_FOUND)
-        message(STATUS "Subproject ${subproject}: package ${_subproject_package} found")
-        break()
-      else ()
-        message(STATUS "Subproject ${subproject}: package ${_subproject_package} not found")
-      endif ()
-    elseif ("${_get_method}" STREQUAL "fetch")
-      if (EXISTS ${_subproject_dir})
-        message(
-          STATUS
-          "Subproject ${subproject}: fetch skipped as source folder ${_subproject_dir} exists "
-          "already"
-        )
-      else ()
-        message(
-          STATUS
-          "Subproject ${subproject}: fetching from repository ${_subproject_git_repository} "
-          "(revision ${_subproject_git_revision}) into source folder ${_subproject_dir}"
-        )
-        FetchContent_Declare(
-          ${subproject}
-          SOURCE_DIR ${_subproject_dir}
-          GIT_REPOSITORY ${_subproject_git_repository}
-          GIT_TAG ${_subproject_git_revision}
-        )
-        FetchContent_Populate(${subproject})
-      endif ()
-      cmake_language(CALL ${_prefix}_add_subdir)
-      break()
+    # Check get-method name correctness
+    if (NOT ${_get_method} IN_LIST _allowed_methods)
+      message(
+        FATAL_ERROR
+        "Subproject ${subproject_package}: Invalid subproject get method '${_get_method}'"
+      )
     endif ()
+
+    # Try to find the package in the system
+    if ("${_get_method}" STREQUAL "find")
+
+      find_package(${subproject_package} QUIET ${subproject_FIND_PACKAGE_ARGS})
+      if (${${subproject_package}_FOUND})
+        message(STATUS "Subproject ${subproject_package}: found by find_package()")
+        break ()
+      endif ()
+
+    # Fetch package from external source (if it had not been fetched yet)
+    elseif ("${_get_method}" STREQUAL "fetch")
+
+      if (EXISTS "${subproject_SOURCE_DIR}")
+        message(
+          STATUS
+          "Subproject ${subproject_package}: source directory ${subproject_SOURCE_DIR} "
+          "already exists, will use local version instead of fetching"
+        )
+        add_subdirectory(${subproject_SOURCE_DIR})
+        break ()
+      endif ()
+
+      FetchContent_Declare(
+        ${subproject_package}
+        SOURCE_DIR ${subproject_SOURCE_DIR}
+        GIT_REPOSITORY ${subproject_GIT_REPOSITORY}
+        GIT_TAG ${subproject_GIT_REVISION}
+      )
+      FetchContent_MakeAvailable(${subproject_package})
+
+      message(
+        STATUS
+        "Subproject ${subproject_package}: fetched from git repository "
+        "${subproject_GIT_REPOSITORY}@${subproject_GIT_REVISION} to source directory "
+        "${subproject_SOURCE_DIR}"
+      )
+      break ()
+
+    endif()
 
   endforeach ()
 
-  if (NOT TARGET ${_subproject_target})
-    message(
-      FATAL_ERROR
-      "Subproject ${subproject}: Could not obtain to export target ${_subproject_target}"
-    )
-  endif ()
+  # Check whether all required targets are present
+  foreach (_target IN ITEMS ${subproject_TARGETS})
+    if (NOT TARGET ${_target})
+      message(
+        FATAL_ERROR
+        "Subproject ${subproject_package}: Could not obtain subproject to provide target "
+        "${_target} (tried: ${subproject_GET_METHODS})"
+      )
+    endif ()
+  endforeach ()
 
-  unset(_prefix)
-  unset(_subproject_package)
-  unset(_subproject_source_dir)
-  unset(_subproject_target)
-  unset(_subproject_git_repository)
-  unset(_subproject_git_revision)
-  unset(_subproject_dir)
-  unset(_get_method)
-
-endmacro ()
+endfunction ()

@@ -31,7 +31,6 @@ endfunction()
 #
 # Args:
 #   PACKAGE package: name of the subproject package
-#   PACKAGE_SOURCE_DIR package_source_dir: where to download the package source
 #   TARGETS target: Target names to use for checking whether subproject was obtained successfully
 #   GIT_REPOSITORY git_repository: Git repository to fetch the subproject from.
 #   GIT_REVISION git_revision: Git revision to fetch
@@ -43,7 +42,7 @@ endfunction()
 #     add_subdirectory() and FetchContent_MakeAvailable() calls.
 #
 function (fortuno_mpi_get_subproject)
-  set(_one_value_args PACKAGE SOURCE_DIR GIT_REPOSITORY GIT_REVISION)
+  set(_one_value_args PACKAGE GIT_REPOSITORY GIT_REVISION)
   set(_multi_value_args GET_METHODS TARGETS FIND_PACKAGE_ARGS EXPORT_VARS)
   cmake_parse_arguments(_subproject "" "${_one_value_args}" "${_multi_value_args}" ${ARGV})
 
@@ -92,29 +91,19 @@ function (fortuno_mpi_get_subproject)
     # Fetch package from external source (if it had not been fetched yet)
     elseif ("${_get_method}" STREQUAL "fetch")
 
-      if (EXISTS "${_subproject_SOURCE_DIR}")
-        message(
-          STATUS
-          "Subproject ${_subproject_PACKAGE}: source directory ${_subproject_SOURCE_DIR} "
-          "already exists, will use local version instead of fetching"
-        )
-        add_subdirectory(${_subproject_SOURCE_DIR})
-        break ()
-      endif ()
-
       FetchContent_Declare(
         ${_subproject_PACKAGE}
-        SOURCE_DIR ${_subproject_SOURCE_DIR}
         GIT_REPOSITORY ${_subproject_GIT_REPOSITORY}
         GIT_TAG ${_subproject_GIT_REVISION}
       )
       FetchContent_MakeAvailable(${_subproject_PACKAGE})
 
+      string(TOLOWER "${_subproject_PACKAGE}" _subproject_PACKAGE_LOWER)
       message(
         STATUS
         "Subproject ${_subproject_PACKAGE}: fetched from git repository "
         "${_subproject_GIT_REPOSITORY}@${_subproject_GIT_REVISION} to source directory "
-        "${_subproject_SOURCE_DIR}"
+        "${${_subproject_PACKAGE_LOWER}_SOURCE_DIR}"
       )
       break ()
 

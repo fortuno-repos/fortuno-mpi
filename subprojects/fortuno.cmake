@@ -7,13 +7,15 @@ function (_fortuno_mpi_get_subproject_fortuno)
 
   # Get the subproject
   fortuno_mpi_get_subproject(
-    Fortuno
+    PACKAGE Fortuno
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/subprojects/fortuno
     GET_METHODS ${FORTUNO_MPI_SUBPROJECT_GET_METHODS}
     GIT_REPOSITORY "https://github.com/fortuno-repos/fortuno.git"
     GIT_REVISION "main"
     TARGETS Fortuno::Fortuno
+    EXPORT_VARS Fortuno_VERSION
   )
+  set(Fortuno_VERSION "${Fortuno_VERSION}" PARENT_SCOPE)
 
 endfunction ()
 

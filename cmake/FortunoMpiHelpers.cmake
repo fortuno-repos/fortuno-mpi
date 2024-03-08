@@ -30,7 +30,7 @@ endfunction()
 # Obtains a subproject by the provided list of methods.
 #
 # Args:
-#   subproject_package: name of the subproject package
+#   PACKAGE package: name of the subproject package
 #   PACKAGE_SOURCE_DIR package_source_dir: where to download the package source
 #   TARGETS target: Target names to use for checking whether subproject was obtained successfully
 #   GIT_REPOSITORY git_repository: Git repository to fetch the subproject from.
@@ -38,17 +38,19 @@ endfunction()
 #   GET_METHODS get_methods: priority list of get methods to obtain the subproject,
 #     possible choices are 'find', 'fetch'.
 #   FIND_PACKAGE_ARGS find_package_args: optional arguments to pass to find_package()
+#   EXPORT_VARS vars: name of the variables which the function should export to the callers scope.
+#     Use this to get access to variables which get defined during find_package(),
+#     add_subdirectory() and FetchContent_MakeAvailable() calls.
 #
-function (fortuno_mpi_get_subproject subproject_package)
-  list(REMOVE_AT ARGV 0)
-  set(one_value_args PACKAGE SOURCE_DIR GIT_REPOSITORY GIT_REVISION)
-  set(multi_value_args GET_METHODS TARGETS FIND_PACKAGE_ARGS)
-  cmake_parse_arguments(subproject "" "${one_value_args}" "${multi_value_args}" ${ARGV})
+function (fortuno_mpi_get_subproject)
+  set(_one_value_args PACKAGE SOURCE_DIR GIT_REPOSITORY GIT_REVISION)
+  set(_multi_value_args GET_METHODS TARGETS FIND_PACKAGE_ARGS EXPORT_VARS)
+  cmake_parse_arguments(_subproject "" "${_one_value_args}" "${_multi_value_args}" ${ARGV})
 
   # Check whether targets are already there
   set(_targets_found)
   set(_targets_missing)
-  foreach (_target IN ITEMS ${subproject_TARGETS})
+  foreach (_target IN ITEMS ${_subproject_TARGETS})
     if (TARGET ${_target})
       LIST(APPEND _targets_found ${_target})
     else ()
@@ -58,61 +60,61 @@ function (fortuno_mpi_get_subproject subproject_package)
   if (_targets_found AND _targets_missing)
     message(
       FATAL_ERROR
-      "Subproject ${subproject_package}: Inconsistent targets, some targets (${_targets_found}) "
+      "Subproject ${_subproject_PACKAGE}: Inconsistent targets, some targets (${_targets_found}) "
       "exist already, while others (${_targets_missing}) are missing"
     )
   elseif (_targets_found)
-    message(STATUS "Subproject ${subproject_package}: All targets already defined")
+    message(STATUS "Subproject ${_subproject_PACKAGE}: All targets already defined")
     return ()
   endif ()
 
   # Obtain subproject according to the priority list
   set(_allowed_methods "find" "fetch")
-  foreach (_get_method IN ITEMS ${subproject_GET_METHODS})
+  foreach (_get_method IN ITEMS ${_subproject_GET_METHODS})
 
     # Check get-method name correctness
     if (NOT ${_get_method} IN_LIST _allowed_methods)
       message(
         FATAL_ERROR
-        "Subproject ${subproject_package}: Invalid subproject get method '${_get_method}'"
+        "Subproject ${_subproject_PACKAGE}: Invalid subproject get method '${_get_method}'"
       )
     endif ()
 
     # Try to find the package in the system
     if ("${_get_method}" STREQUAL "find")
 
-      find_package(${subproject_package} QUIET ${subproject_FIND_PACKAGE_ARGS})
-      if (${${subproject_package}_FOUND})
-        message(STATUS "Subproject ${subproject_package}: found by find_package()")
+      find_package(${_subproject_PACKAGE} QUIET ${_subproject_FIND_PACKAGE_ARGS})
+      if (${${_subproject_PACKAGE}_FOUND})
+        message(STATUS "Subproject ${_subproject_PACKAGE}: found by find_package()")
         break ()
       endif ()
 
     # Fetch package from external source (if it had not been fetched yet)
     elseif ("${_get_method}" STREQUAL "fetch")
 
-      if (EXISTS "${subproject_SOURCE_DIR}")
+      if (EXISTS "${_subproject_SOURCE_DIR}")
         message(
           STATUS
-          "Subproject ${subproject_package}: source directory ${subproject_SOURCE_DIR} "
+          "Subproject ${_subproject_PACKAGE}: source directory ${_subproject_SOURCE_DIR} "
           "already exists, will use local version instead of fetching"
         )
-        add_subdirectory(${subproject_SOURCE_DIR})
+        add_subdirectory(${_subproject_SOURCE_DIR})
         break ()
       endif ()
 
       FetchContent_Declare(
-        ${subproject_package}
-        SOURCE_DIR ${subproject_SOURCE_DIR}
-        GIT_REPOSITORY ${subproject_GIT_REPOSITORY}
-        GIT_TAG ${subproject_GIT_REVISION}
+        ${_subproject_PACKAGE}
+        SOURCE_DIR ${_subproject_SOURCE_DIR}
+        GIT_REPOSITORY ${_subproject_GIT_REPOSITORY}
+        GIT_TAG ${_subproject_GIT_REVISION}
       )
-      FetchContent_MakeAvailable(${subproject_package})
+      FetchContent_MakeAvailable(${_subproject_PACKAGE})
 
       message(
         STATUS
-        "Subproject ${subproject_package}: fetched from git repository "
-        "${subproject_GIT_REPOSITORY}@${subproject_GIT_REVISION} to source directory "
-        "${subproject_SOURCE_DIR}"
+        "Subproject ${_subproject_PACKAGE}: fetched from git repository "
+        "${_subproject_GIT_REPOSITORY}@${_subproject_GIT_REVISION} to source directory "
+        "${_subproject_SOURCE_DIR}"
       )
       break ()
 
@@ -121,14 +123,19 @@ function (fortuno_mpi_get_subproject subproject_package)
   endforeach ()
 
   # Check whether all required targets are present
-  foreach (_target IN ITEMS ${subproject_TARGETS})
+  foreach (_target IN ITEMS ${_subproject_TARGETS})
     if (NOT TARGET ${_target})
       message(
         FATAL_ERROR
-        "Subproject ${subproject_package}: Could not obtain subproject to provide target "
+        "Subproject ${_subproject_PACKAGE}: Could not obtain subproject to provide target "
         "${_target}"
       )
     endif ()
   endforeach ()
+
+  # Export required variables
+  foreach (_var IN ITEMS ${_subproject_EXPORT_VARS})
+    set(${_var} "${${_var}}" PARENT_SCOPE)
+  endforeach()
 
 endfunction ()

@@ -1,27 +1,25 @@
-function (_fortuno_mpi_get_subproject_fortuno)
+# Imports the Fortuno subproject.
 
-  # Define all subproject related variables
-  set(FORTUNO_INSTALL ${FORTUNO_MPI_INSTALL})
-  set(FORTUNO_INSTALL_MODULEDIR ${FORTUNO_MPI_INSTALL_MODULEDIR})
-  set(FORTUNO_BUILD_SHARED_LIBS ${FORTUNO_MPI_BUILD_SHARED_LIBS})
+# Define variables influencing how and from where the subproject is obtained
+set(CMAKE_REQUIRE_FIND_PACKAGE_Fortuno ${FORTUNO_MPI_SUBPROJECT_REQUIRE_FIND})
+set(CMAKE_DISABLE_FIND_PACKAGE_Fortuno ${FORTUNO_MPI_SUBPROJECT_DISABLE_FIND})
+# set FETCHCONTENT_SOURCE_DIR_FORTUNO to use a local source of the subproject
 
-  # Get the subproject
-  #
-  # If you want to use temporarily a local customized version of Fortuno, set the
-  # FETCHCONTENT_SOURCE_DIR_FORTUNO cache variable to the location of the customized source.
-  #
-  fortuno_mpi_get_subproject(
-    PACKAGE Fortuno
-    GET_METHODS ${FORTUNO_MPI_SUBPROJECT_GET_METHODS}
-    GIT_REPOSITORY "https://github.com/fortuno-repos/fortuno.git"
-    GIT_REVISION "main"
-    TARGETS Fortuno::Fortuno
-    EXPORT_VARS Fortuno_VERSION
-  )
+# Define all subproject related variables
+set(FORTUNO_INSTALL ${FORTUNO_MPI_INSTALL})
+set(FORTUNO_INSTALL_MODULEDIR ${FORTUNO_MPI_INSTALL_MODULEDIR})
+set(FORTUNO_BUILD_SHARED_LIBS ${FORTUNO_MPI_BUILD_SHARED_LIBS})
 
-  # Export version info to global scope
-  set(Fortuno_VERSION "${Fortuno_VERSION}" PARENT_SCOPE)
+FetchContent_Declare(
+  Fortuno
+  GIT_REPOSITORY "https://github.com/fortuno-repos/fortuno.git"
+  GIT_TAG "main"
+  FIND_PACKAGE_ARGS
+)
+FetchContent_MakeAvailable(Fortuno)
 
-endfunction ()
-
-_fortuno_mpi_get_subproject_fortuno()
+if (Fortuno_FOUND)
+  message(STATUS "Subproject Fortuno: using installed version")
+else ()
+  message(STATUS "Subproject Fortuno: building from source in ${fortuno_SOURCE_DIR}")
+endif ()

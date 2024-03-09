@@ -37,9 +37,16 @@ set(
   "Sub-directory to install the Fortran module files into (relative to CMAKE_INSTALL_LIBDIR)"
 )
 
-set(
-  FORTUNO_MPI_SUBPROJECT_GET_METHODS "find;fetch" CACHE STRING
-  "Priority list of methods to obtain subprojects"
+option(
+  FORTUNO_MPI_SUBPROJECT_REQUIRE_FIND
+  "Whether all subprojects should be obtained by the find method (e.g. for packaging)"
+  FALSE
+)
+
+option(
+  FORTUNO_MPI_SUBPROJECT_DISABLE_FIND
+  "Whether none of the subprojects should be obtained by the find method"
+  FALSE
 )
 
 #[=================================================================================================[
@@ -66,16 +73,18 @@ endif()
 #                                 Main definition                                                 #
 ]=================================================================================================]
 
-# Get Fortuno as subproject
+# Get subproject(s)
+include(FetchContent)
 include(subprojects/fortuno.cmake)
 
+# Build library and examples
 add_subdirectory(src)
 if (FORTUNO_MPI_BUILD_EXAMPLES)
   add_subdirectory(example)
 endif ()
 
 #[=================================================================================================[
-#                                 Install or Export                                               #
+#                                 Install and export                                              #
 ]=================================================================================================]
 
 if (FORTUNO_MPI_INSTALL)

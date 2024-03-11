@@ -24,28 +24,28 @@ project(
 #                                 Options                                                         #
 ]=================================================================================================]
 
-option(FORTUNO_MPI_BUILD_SHARED_LIBS "Fortuno: Build as shared library" ${PROJECT_IS_TOP_LEVEL})
+option(FORTUNO_MPI_BUILD_SHARED_LIBS "FortunoMpi: Build as shared library" ${PROJECT_IS_TOP_LEVEL})
 
-option(FORTUNO_MPI_BUILD_TESTS "Fortuno: Build test suite" ${PROJECT_IS_TOP_LEVEL})
+option(FORTUNO_MPI_BUILD_TESTS "FortunoMpi: Build test suite" ${PROJECT_IS_TOP_LEVEL})
 
-option(FORTUNO_MPI_BUILD_EXAMPLES "Fortuno: Build example apps" ${PROJECT_IS_TOP_LEVEL})
+option(FORTUNO_MPI_BUILD_EXAMPLES "FortunoMpi: Build example apps" ${PROJECT_IS_TOP_LEVEL})
 
-option(FORTUNO_MPI_INSTALL "Fortuno: Install project" ${PROJECT_IS_TOP_LEVEL})
+option(FORTUNO_MPI_INSTALL "FortunoMpi: Install project" ${PROJECT_IS_TOP_LEVEL})
 
 set(
   FORTUNO_MPI_INSTALL_MODULEDIR "modules" CACHE STRING
-  "Sub-directory to install the Fortran module files into (relative to CMAKE_INSTALL_LIBDIR)"
+  "FortunoMpi: Sub-directory to install Fortran module files (relative to CMAKE_INSTALL_LIBDIR)"
 )
 
 option(
   FORTUNO_MPI_SUBPROJECT_REQUIRE_FIND
-  "Whether all subprojects should be obtained by the find method (e.g. for packaging)"
+  "FortunoMpi: Whether all subprojects should be obtained by the find method (e.g. for packaging)"
   FALSE
 )
 
 option(
   FORTUNO_MPI_SUBPROJECT_DISABLE_FIND
-  "Whether none of the subprojects should be obtained by the find method"
+  "FortunoMpi: Whether none of the subprojects should be obtained by the find method"
   FALSE
 )
 

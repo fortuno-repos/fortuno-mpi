@@ -18,7 +18,7 @@ function (fortuno_mpi_setup_build_type default_build_type)
         CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo"
       )
     else()
-      message(STATUS "Fortuno: build type: ${CMAKE_BUILD_TYPE} (manually selected single-config)")
+      message(STATUS "Build type ${CMAKE_BUILD_TYPE} (manually selected single-config)")
     endif()
   endif()
 

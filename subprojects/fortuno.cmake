@@ -6,9 +6,14 @@ set(CMAKE_DISABLE_FIND_PACKAGE_Fortuno ${FORTUNO_MPI_SUBPROJECT_DISABLE_FIND})
 # set FETCHCONTENT_SOURCE_DIR_FORTUNO to use a local source of the subproject
 
 # Define all subproject related variables
-set(FORTUNO_INSTALL ${FORTUNO_MPI_INSTALL})
-set(FORTUNO_INSTALL_MODULEDIR ${FORTUNO_MPI_INSTALL_MODULEDIR})
-set(FORTUNO_BUILD_SHARED_LIBS ${FORTUNO_MPI_BUILD_SHARED_LIBS})
+option(FORTUNO_INSTALL "Fortuno: Whether to install project" ${FORTUNO_MPI_INSTALL})
+set(
+  FORTUNO_INSTALL_MODULEDIR "${FORTUNO_MPI_INSTALL_MODULEDIR}" CACHE STRING
+  "Fortuno: Installation directory for Fortran module files (relative to CMAKE_INSTALL_LIBDIR)"
+)
+option(
+  FORTUNO_BUILD_SHARED_LIBS "Fortuno: Build as shared library" ${FORTUNO_MPI_BUILD_SHARED_LIBS}
+)
 
 FetchContent_Declare(
   Fortuno

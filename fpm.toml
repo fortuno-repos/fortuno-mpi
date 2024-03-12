@@ -23,4 +23,5 @@ source-form = "free"
 
 [dependencies]
 mpi = "*"
-fortuno = { git = "https://github.com/fortuno-repos/fortuno.git" }
+# fortuno = { git = "https://github.com/fortuno-repos/fortuno.git" }
+fortuno = { git = "https://github.com/aradi/fortuno.git", branch="restruct" }

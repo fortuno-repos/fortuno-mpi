@@ -17,8 +17,10 @@ option(
 
 FetchContent_Declare(
   Fortuno
-  GIT_REPOSITORY "https://github.com/fortuno-repos/fortuno.git"
-  GIT_TAG "main"
+  # GIT_REPOSITORY "https://github.com/fortuno-repos/fortuno.git"
+  # GIT_TAG "main"
+  GIT_REPOSITORY "https://github.com/aradi/fortuno.git"
+  GIT_TAG "restruct"
   FIND_PACKAGE_ARGS
 )
 FetchContent_MakeAvailable(Fortuno)

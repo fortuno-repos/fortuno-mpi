@@ -2,4 +2,9 @@
 # Licensed under the BSD-2-Clause Plus Patent license.
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 
-subdir('fortuno')
+target_sources(
+  Fortuno_MPI
+  PRIVATE
+  mpi.f90
+)
+add_subdirectory(mpi)

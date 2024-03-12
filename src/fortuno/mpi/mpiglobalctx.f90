@@ -5,8 +5,8 @@
 !> Global serial context to avoid explicit passing of context when using non-threaded serial driver
 module fortuno_mpi_mpiglobalctx
   use mpi_f08, only : mpi_comm
-  use fortuno_basetypes, only : test_ptr_item
-  use fortuno_testinfo, only : check_result
+  use fortuno_base_basetypes, only : test_ptr_item
+  use fortuno_base_testinfo, only : check_result
   use fortuno_mpi_mpicontext, only : mpi_context
   implicit none
 

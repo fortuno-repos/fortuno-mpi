@@ -1,4 +1,6 @@
 [wrap-git]
 directory = fortuno
-url = https://github.com/fortuno-repos/fortuno.git
-revision = head
+# url = https://github.com/fortuno-repos/fortuno.git
+# revision = head
+url = https://github.com/aradi/fortuno.git
+revision = restruct

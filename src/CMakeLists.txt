@@ -13,12 +13,7 @@ set_target_properties(
 )
 add_library(Fortuno::Fortuno_MPI ALIAS Fortuno_MPI)
 
-target_sources(
-  Fortuno_MPI
-  PRIVATE
-  fortuno_mpi.f90
-)
-add_subdirectory(fortuno_mpi)
+add_subdirectory(fortuno)
 
 target_link_libraries(Fortuno_MPI PRIVATE MPI::MPI_Fortran)
 target_link_libraries(Fortuno_MPI PUBLIC Fortuno::Fortuno)

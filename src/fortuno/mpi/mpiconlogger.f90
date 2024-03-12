@@ -4,11 +4,11 @@
 
 !> Contains the implementation of the test logger for the mpi driver
 module fortuno_mpi_mpiconlogger
+  use fortuno_base_consolelogger, only : console_logger
+  use fortuno_base_testinfo, only : failure_info
+  use fortuno_base_utils, only : as_char, nl
   use fortuno_mpi_mpienv, only : mpi_env
   use fortuno_mpi_mpitestinfo, only : mpi_failure_location
-  use fortuno_serial_serialconlogger, only : serial_console_logger
-  use fortuno_testinfo, only : failure_info
-  use fortuno_utils, only : as_char, nl
   implicit none
 
   private
@@ -16,7 +16,7 @@ module fortuno_mpi_mpiconlogger
 
 
   !> Implements an mpi logger which logs to a formatted unit
-  type, extends(serial_console_logger) :: mpi_console_logger
+  type, extends(console_logger) :: mpi_console_logger
     type(mpi_env) :: mpienv
   contains
     procedure :: is_active => mpi_console_logger_is_active
@@ -61,7 +61,7 @@ contains
     class(mpi_console_logger), intent(inout) :: this
 
     if (.not. this%is_active()) return
-    call this%serial_console_logger%start_drive()
+    call this%console_logger%start_drive()
     call this%log_message(nl // "Nr. of ranks: " // as_char(this%mpienv%nranks))
 
   end subroutine mpi_console_logger_start_drive

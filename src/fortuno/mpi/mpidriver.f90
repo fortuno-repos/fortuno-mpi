@@ -4,15 +4,15 @@
 
 !> Implements a driver for mpi tests
 module fortuno_mpi_mpidriver
-  use fortuno_basetypes, only : test_case_base, test_suite_base
+  use fortuno_base_basetypes, only : test_case_base, test_suite_base
+  use fortuno_base_testcontext, only : test_context
+  use fortuno_base_testdriver, only : init_test_driver, test_driver, test_runner
   use fortuno_mpi_mpibasetypes, only : as_mpi_case_base, as_mpi_suite_base,&
       & mpi_case_base, mpi_suite_base
   use fortuno_mpi_mpicontext, only : as_mpi_context, init_mpi_context_factory, mpi_context,&
       & mpi_context_factory
   use fortuno_mpi_mpienv, only : mpi_env
   use fortuno_mpi_mpiglobalctx, only : set_mpi_global_context
-  use fortuno_testcontext, only : test_context
-  use fortuno_testdriver, only : init_test_driver, test_driver, test_runner
   implicit none
 
   private

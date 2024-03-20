@@ -54,7 +54,7 @@ jobs:
         if: ${{ contains(matrix.compiler, 'intel') }}
         uses: rscohn2/setup-oneapi@v0
         with:
-          # Note: ifx is needed to avoid linking error when using MPI
+          # Note: icx is needed to avoid linking error when using MPI
           components: |
             ifx
             icx
@@ -137,7 +137,7 @@ jobs:
           cd test/export
           meson setup --wrap-mode nofallback ${BUILD_DIR}
           ninja -C ${BUILD_DIR}
-          mpirun -n $(nproc) ${BUILD_DIR}/testapp
+          mpirun -n 2 ${BUILD_DIR}/testapp
           rm -rf ./${BUILD_DIR}
 
       - name: Test Meson subproject export
@@ -152,5 +152,5 @@ jobs:
           echo -e "url=file://${FORTUNO_MPI_DIR}\nrevision=${GIT_REV}\n" >> subprojects/fortuno-mpi.wrap
           meson setup --wrap-mode forcefallback ${BUILD_DIR}
           ninja -C ${BUILD_DIR}
-          mpirun -n $(nproc) ${BUILD_DIR}/testapp
+          mpirun -n 2 ${BUILD_DIR}/testapp
           rm -rf subprojects ${BUILD_DIR}

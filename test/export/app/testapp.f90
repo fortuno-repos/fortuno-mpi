@@ -5,8 +5,7 @@
 !> Test app driving Fortuno unit tests
 program testapp
   use mpi_f08, only : mpi_comm, mpi_bcast, MPI_INTEGER
-  use fortuno, only : is_equal
-  use fortuno_mpi, only : execute_mpi_cmd_app, global_comm, test => mpi_case_item,&
+  use fortuno_mpi, only : execute_mpi_cmd_app, global_comm, is_equal, test => mpi_case_item,&
       & check => mpi_check, this_rank
   implicit none
 

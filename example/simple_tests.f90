@@ -4,8 +4,8 @@
 
 module simple_tests
   use mylib, only : broadcast
-  use fortuno, only : as_char, is_equal, test_item
-  use fortuno_mpi, only : global_comm, test => mpi_case_item, check => mpi_check, this_rank
+  use fortuno_mpi, only : as_char, global_comm, is_equal, test => mpi_case_item,&
+      & check => mpi_check, test_item, this_rank
   implicit none
 
   private

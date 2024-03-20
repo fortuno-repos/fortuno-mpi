@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 
 target_sources(
-  Fortuno_MPI
+  fortuno_mpi
   PRIVATE
   mpibasetypes.f90
   mpicmdapp.f90

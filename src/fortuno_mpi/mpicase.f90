@@ -4,7 +4,7 @@
 
 !> Contains the simplest possible parameterless serial test implementation
 module fortuno_mpi_mpicase
-  use fortuno_base_basetypes, only : test_item
+  use fortuno, only : test_item
   use fortuno_mpi_mpibasetypes, only : mpi_case_base
   implicit none
 

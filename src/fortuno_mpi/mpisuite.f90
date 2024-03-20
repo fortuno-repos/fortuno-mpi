@@ -4,7 +4,7 @@
 
 !> Contains a trivial implementation for a serial suite
 module fortuno_mpi_mpisuite
-  use fortuno_base_basetypes, only : test_item
+  use fortuno, only : test_item
   use fortuno_mpi_mpibasetypes, only : mpi_suite_base
   implicit none
 

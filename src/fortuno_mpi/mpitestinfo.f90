@@ -4,8 +4,7 @@
 
 !> Contains the MPI-extensions of test info structures
 module fortuno_mpi_mpitestinfo
-  use fortuno_base_testinfo, only : init_failure_location, failure_location
-  use fortuno_base_utils, only : as_char, nl
+  use fortuno, only : as_char, init_failure_location, failure_location, nl
   implicit none
 
   private

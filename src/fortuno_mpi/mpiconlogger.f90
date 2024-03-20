@@ -4,9 +4,7 @@
 
 !> Contains the implementation of the test logger for the mpi driver
 module fortuno_mpi_mpiconlogger
-  use fortuno_base_consolelogger, only : console_logger
-  use fortuno_base_testinfo, only : failure_info
-  use fortuno_base_utils, only : as_char, nl
+  use fortuno, only : as_char, console_logger, failure_info, nl
   use fortuno_mpi_mpienv, only : mpi_env
   use fortuno_mpi_mpitestinfo, only : mpi_failure_location
   implicit none

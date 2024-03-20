@@ -15,10 +15,10 @@ set_target_properties(
   OUTPUT_NAME fortuno-mpi
   Fortran_MODULE_DIRECTORY "${moduledir}"
 )
-target_link_libraries(Fortuno_MPI PRIVATE MPI::MPI_Fortran)
-target_link_libraries(Fortuno_MPI PUBLIC Fortuno::Fortuno)
+target_link_libraries(fortuno_mpi PRIVATE MPI::MPI_Fortran)
+target_link_libraries(fortuno_mpi PUBLIC Fortuno::fortuno)
 target_include_directories(
-  Fortuno_MPI PUBLIC
+  fortuno_mpi PUBLIC
   $<BUILD_INTERFACE:${moduledir}>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_LIBDIR}/${FORTUNO_MPI_INSTALL_MODULEDIR}>
 )

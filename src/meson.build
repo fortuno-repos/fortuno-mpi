@@ -2,4 +2,4 @@
 # Licensed under the BSD-2-Clause Plus Patent license.
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 
-subdir('fortuno')
+subdir('fortuno_mpi')

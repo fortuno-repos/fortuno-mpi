@@ -11,7 +11,8 @@ systems.
 
 This repository contains the MPI-dependent part of the Fortuno project. Please
 visit the main `Fortuno repository <https://github.com/fortuno-repos/fortuno>`_
-for further information.
+and the `Fortuno documentation <https://fortuno.readthedocs.io/>`_ for further
+information.
 
 
 License

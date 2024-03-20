@@ -2,39 +2,34 @@
 # Licensed under the BSD-2-Clause Plus Patent license.
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 
-add_library(Fortuno_MPI)
-set_target_properties(
-  Fortuno_MPI PROPERTIES
-  VERSION ${PROJECT_VERSION}
-  # SOVERSION ${PROJECT_VERSION_MAJOR}
-  SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-  EXPORT_NAME Fortuno_MPI
-  OUTPUT_NAME fortuno-mpi
-)
-add_library(Fortuno::Fortuno_MPI ALIAS Fortuno_MPI)
-
-add_subdirectory(fortuno)
-
-target_link_libraries(Fortuno_MPI PRIVATE MPI::MPI_Fortran)
-target_link_libraries(Fortuno_MPI PUBLIC Fortuno::Fortuno)
-
-# Store generated mod-files in a separate folder
+# Folder for generated mod-files
 set(moduledir "${CMAKE_CURRENT_BINARY_DIR}/mods")
+
+add_library(fortuno_mpi)
 set_target_properties(
-  Fortuno_MPI PROPERTIES
+  fortuno_mpi PROPERTIES
+  VERSION ${PROJECT_VERSION}
+  # TODO: change to ${PROJECT_VERSION_MAJOR} once project version reaches 1.0
+  SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+  EXPORT_NAME fortuno_mpi
+  OUTPUT_NAME fortuno-mpi
   Fortran_MODULE_DIRECTORY "${moduledir}"
 )
-
-# Add mod-file directory to include search path for targets depending on the library
+target_link_libraries(Fortuno_MPI PRIVATE MPI::MPI_Fortran)
+target_link_libraries(Fortuno_MPI PUBLIC Fortuno::Fortuno)
 target_include_directories(
   Fortuno_MPI PUBLIC
   $<BUILD_INTERFACE:${moduledir}>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_LIBDIR}/${FORTUNO_MPI_INSTALL_MODULEDIR}>
 )
+target_sources(fortuno_mpi PRIVATE fortuno_mpi.f90)
+add_subdirectory(fortuno_mpi)
+
+add_library(Fortuno::fortuno_mpi ALIAS fortuno_mpi)
 
 if (FORTUNO_MPI_INSTALL)
   install(
-    TARGETS Fortuno_MPI
+    TARGETS fortuno_mpi
     EXPORT FortunoMpiTargets
     LIBRARY
       DESTINATION "${CMAKE_INSTALL_LIBDIR}"

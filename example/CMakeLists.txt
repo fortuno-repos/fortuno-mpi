@@ -27,6 +27,5 @@ target_sources(
 )
 target_link_libraries(
   FortunoMpi_example_testapp PRIVATE
-  FortunoMpi_example_mylib Fortuno::Fortuno_MPI
-  MPI::MPI_Fortran
+  FortunoMpi_example_mylib Fortuno::fortuno_mpi MPI::MPI_Fortran
 )

@@ -1,11 +1,9 @@
-# Imports the Fortuno subproject.
-
-# Define variables influencing how and from where the subproject is obtained
+# Variables influencing how subproject is obtained
 set(CMAKE_REQUIRE_FIND_PACKAGE_Fortuno ${FORTUNO_MPI_SUBPROJECT_REQUIRE_FIND})
 set(CMAKE_DISABLE_FIND_PACKAGE_Fortuno ${FORTUNO_MPI_SUBPROJECT_DISABLE_FIND})
 # set FETCHCONTENT_SOURCE_DIR_FORTUNO to use a local source of the subproject
 
-# Define all subproject related variables
+# Subproject related variables
 option(FORTUNO_INSTALL "Fortuno: Whether to install project" ${FORTUNO_MPI_INSTALL})
 set(
   FORTUNO_INSTALL_MODULEDIR "${FORTUNO_MPI_INSTALL_MODULEDIR}" CACHE STRING

@@ -54,7 +54,7 @@ jobs:
         if: ${{ contains(matrix.compiler, 'intel') }}
         uses: rscohn2/setup-oneapi@v0
         with:
-          # Note: ifx is needed to avoid linking error when using MPI
+          # Note: icx is needed to avoid linking error when using MPI
           components: |
             ifx
             icx

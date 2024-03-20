@@ -4,8 +4,8 @@
 
 module simple_tests
   use mylib, only : broadcast
-  use fortuno, only : is_equal, test_item
-  use fortuno_mpi, only : global_comm, test => mpi_case_item, check => mpi_check, this_rank
+  use fortuno_mpi, only : as_char, global_comm, is_equal, test => mpi_case_item,&
+      & check => mpi_check, test_item, this_rank
   implicit none
 
   private
@@ -41,13 +41,10 @@ contains
     call broadcast(global_comm(), buffer, sourcerank)
 
     ! Make every third rank fail for demonstration purposes
-    block
-      use fortuno_utils, only : as_char
-      if (mod(this_rank(), 3) == 2) then
-        buffer = sourceval + 1
-        msg = "Failing on rank " // as_char(this_rank()) // " on purpose"
-      end if
-    end block
+    if (mod(this_rank(), 3) == 2) then
+      buffer = sourceval + 1
+      msg = "Failing on rank " // as_char(this_rank()) // " on purpose"
+    end if
 
     ! THEN each rank must contain source rank's value
     call check(is_equal(buffer, sourceval), msg=msg)

@@ -3,6 +3,6 @@
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 
 fortuno_mpi_srcs += files(
-  'fortuno_mpi.f90'
+  'fortuno_mpi.f90',
 )
 subdir('fortuno_mpi')

@@ -12,6 +12,7 @@
 cmake_minimum_required(VERSION 3.22...3.28)
 
 list(APPEND CMAKE_MESSAGE_CONTEXT FortunoMpi)
+
 project(
   FortunoMpi
   VERSION 0.1.0
@@ -61,8 +62,8 @@ if (FORTUNO_MPI_INSTALL)
   include(GNUInstallDirs)
 endif ()
 
-fortuno_mpi_setup_build_type("RelWithDebInfo")
 set(BUILD_SHARED_LIBS ${FORTUNO_MPI_BUILD_SHARED_LIBS})
+fortuno_mpi_setup_build_type("RelWithDebInfo")
 
 find_package(MPI REQUIRED)
 if(NOT MPI_FORTRAN_FOUND)

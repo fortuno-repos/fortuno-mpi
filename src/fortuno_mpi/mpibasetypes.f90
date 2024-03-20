@@ -4,7 +4,7 @@
 
 !> Contains base type for mpi test suites
 module fortuno_mpi_mpibasetypes
-  use fortuno_basetypes, only : test_case_base, test_suite_base
+  use fortuno, only : test_case_base, test_suite_base
   implicit none
 
   private

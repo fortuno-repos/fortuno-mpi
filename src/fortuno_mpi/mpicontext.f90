@@ -4,10 +4,9 @@
 
 !> Contains context extended for the MPI-case
 module fortuno_mpi_mpicontext
-  use fortuno_testinfo, only : failure_location
+  use fortuno, only : context_factory, failure_location, test_context
   use fortuno_mpi_mpienv, only : mpi_env
   use fortuno_mpi_mpitestinfo, only : init_mpi_failure_location, mpi_failure_location
-  use fortuno_testcontext, only : context_factory, test_context
   implicit none
 
   private

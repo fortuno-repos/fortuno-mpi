@@ -53,7 +53,7 @@ contains
   subroutine mpi_case_run(this)
 
     !> Instance
-    class(mpi_case), intent(inout) :: this
+    class(mpi_case), intent(in) :: this
 
     call this%proc()
 

@@ -25,7 +25,7 @@ module fortuno_mpi_mpibasetypes
     subroutine mpi_case_base_run(this)
       import mpi_case_base
       implicit none
-      class(mpi_case_base), intent(inout) :: this
+      class(mpi_case_base), intent(in) :: this
     end subroutine mpi_case_base_run
 
   end interface

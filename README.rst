@@ -1,6 +1,6 @@
-*******************************************************
-Fortuno – extensible unit testing framework for Fortran
-*******************************************************
+****************************************************************************
+Fortuno-MPI – extensible MPI-parallelized unit testing framework for Fortran
+****************************************************************************
 
 The **Fortuno** (Fortran Unit Testing Objects) project offers a flexible,
 extensible, object oriented unit testing framework for the Fortran language. It
@@ -9,10 +9,13 @@ amount of boiler plate code when writing unit tests, as well as to modularity
 and extensibility by offering building blocks for customized unit testing
 systems.
 
-This repository contains the MPI-dependent part of the Fortuno project. Please
-visit the main `Fortuno repository <https://github.com/fortuno-repos/fortuno>`_
-and the `Fortuno documentation <https://fortuno.readthedocs.io/>`_ for further
-information.
+This repository contains the MPI-dependent part of the Fortuno project. Use this
+respository, if you wish to test MPI-parallelized code.
+
+**Documentation** is available on the `Fortuno documentation
+<https://fortuno.readthedocs.io>`_ page. You can also have a look at the
+examples in the `example folder <example/>`_ and visit the `Fortuno repository
+<https://github.com/fortuno-repos/fortuno>`_ for further information.
 
 
 License
